@@ -2,9 +2,11 @@ import numpy as np
 
 def Normalized(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_space, density_unit):
     """
-    This function will normalize real and imaginary part of psi to flat field.
+    This function will normalize real and imaginary part of psi to flat field. Which means after normalization,
+    Re(psi)^2 + Im(psi)^2 is a flat density field.
     It does not have the conception of unit. Check it before sending in.
-    Which means after normalization, Re(psi)^2 + Im(psi)^2 is a flat density field.
+    It use [x][y][z] coordinate.
+
     :param profile: A dict contains keys "Radius", "Density".
     :param dataRe: Real field to normalize.
     :param dataIm: Imag field to normalize.
