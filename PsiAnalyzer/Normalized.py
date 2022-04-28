@@ -1,12 +1,11 @@
 import numpy as np
-import pandas as pd
 
-# TODO: I should make this method directly eat ProRadius and ProDensity
-def Normalized(profilefile, dataRe, dataIm, data_dim, data_type, center_idx, cell_space, density_unit):
+def Normalized(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_space, density_unit):
     """
     This function will normalize real and imaginary part of psi to flat field.
+    It does not have the conception of unit. Check it before sending in.
     Which means after normalization, Re(psi)^2 + Im(psi)^2 is a flat density field.
-    :param profilefile: Where to read profile file. Skip first row, and the column order is "Radius"(kpc), "Density"(g/cm^3).
+    :param profile: A dict contains keys "Radius", "Density".
     :param dataRe: Real field to normalize.
     :param dataIm: Imag field to normalize.
     :param data_type: NumPy data type.
@@ -14,13 +13,11 @@ def Normalized(profilefile, dataRe, dataIm, data_dim, data_type, center_idx, cel
     :param center_idx: Center index of the data. It doesn't necessarily need to be an integer.
     :param cell_space: Size of the cell in "cm".
     :param density_unit: Density unit of psi field.
-    :return:
+    :return: flat normalized Re(psi), Im(psi)
     """
     # Read profile
-    kpc2cm = 3.086e+21
-    profile = pd.read_csv(profilefile, skiprows=1, names=["Radius", "Density"], sep=" ")
-    ProRadius = profile["Radius"].to_numpy() * kpc2cm
-    ProDensity = profile["Density"].to_numpy()
+    ProRadius = profile["Radius"]
+    ProDensity = profile["Density"]
 
     # Calculate each cell distance from center index
     X, Y, Z = np.meshgrid(np.arange(data_dim[0]), np.arange(data_dim[1]), np.arange(data_dim[2]), indexing='ij')
@@ -58,6 +55,8 @@ def Normalized(profilefile, dataRe, dataIm, data_dim, data_type, center_idx, cel
     D1 += ProDensity[-2] * mask
     D2 += ProDensity[-1] * mask
 
+    assert (len(np.argwhere(R2 == 0)) == 0) or (len(np.argwhere(R1 == 0)) == 0), "Matrix element for interpolating " \
+                                                                                 "not set. "
     AveDensity = ((R2 - RadiusData)*D1 + (RadiusData - R1)*D2) / (R2 - R1)
 
     # Return normalized real and imaginary part of psi.
