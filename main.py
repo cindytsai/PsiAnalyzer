@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from PsiAnalyzer.Normalized import Normalized
+from PsiAnalyzer.Normalize import Normalize
 
 ## Read data file name and basic info.
 filepath = "./Data/"
@@ -26,15 +26,16 @@ profile_raw = pd.read_csv(filepath + profile_filename, skiprows=1, names=["Radiu
 profile = {"Radius": profile_raw["Radius"].to_numpy() * kpc2cm,
            "Density": profile_raw["Density"].to_numpy()}
 
+
 ## (1) Get normalized Re(psi) and Im(psi) field
 NormField = dict()
 
-## Calculate using Normalized function.
-# NormField["Real"], NormField["Imag"] = Normalized(profile, field["Real"], field["Imag"], dimensions, datatype,
-#                                                   center_idx, code_unit * cell_unit, density_unit)
+##     Calculate using Normalized function.
+# NormField["Real"], NormField["Imag"] = Normalize(profile, field["Real"], field["Imag"], dimensions, datatype,
+#                                                  center_idx, code_unit * cell_unit, density_unit)
 # np.savez(filepath + "NormField.npz", Real=NormField["Real"], Imag=NormField["Imag"])
 
-## Read from file.
+##     Read from file.
 temp = np.load(filepath + "NormField.npz")
 NormField["Real"] = temp["Real"]
 NormField["Imag"] = temp["Imag"]
