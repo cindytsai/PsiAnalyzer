@@ -14,7 +14,7 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
     :param check_convergence: Check convergence. Default is False.
     :param check_pad: List of padding ratio to check for convergence. If fft_pad does not include in the list, it will
     be checked as well. This is only for convergence check, the output will still be evaluated using fft_pad.
-    :return: List [v_x, v_y, v_z]
+    :return: List [v_x, v_y, v_z], v_x/y/z is velocity field with shape same as input array.
     """
     # get grad(dataRe) and grad(dataIm) through fft method
     # plot difference of paddings in list check_pad, if check_convergence == True.

@@ -29,7 +29,7 @@ profile = {"Radius": profile_raw["Radius"].to_numpy() * kpc2cm,
 
 
 ## (1) Get normalized Re(psi) and Im(psi) field
-NormField = dict()
+# NormField = dict()
 
 ##     Calculate using Normalized function.
 # NormField["Real"], NormField["Imag"] = Normalize(profile, field["Real"], field["Imag"], dimensions, datatype,
@@ -37,11 +37,24 @@ NormField = dict()
 # np.savez(filepath + "NormField.npz", Real=NormField["Real"], Imag=NormField["Imag"])
 
 ##     Read from file.
-temp = np.load(filepath + "NormField.npz")
-NormField["Real"] = temp["Real"]
-NormField["Imag"] = temp["Imag"]
+# temp = np.load(filepath + "NormField.npz")
+# NormField["Real"] = temp["Real"]
+# NormField["Imag"] = temp["Imag"]
 
 ## (2) Get velocity field
-vx, vy, vz = GetVelocity(NormField["Real"], NormField["Imag"], code_unit*cell_unit, 0.2, check_convergence=True,
-                         check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175])
-np.savez(filepath + "VelocityField.npz", VelX=vx, VelY=vy, VelZ=vz)
+VelField = dict()
+
+##     Calculate using GetVelocity function, using FFT methods.
+# VelField["VelX"], VelField["VelY"], VelField["VelZ"] = GetVelocity(NormField["Real"], NormField["Imag"],
+#                                                                    code_unit*cell_unit, 0.2, check_convergence=True,
+#                                                                    check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175])
+# np.savez(filepath + "VelocityField.npz", VelX=VelField["VelX"], VelY=VelField["VelY"], VelZ=VelField["VelZ"])
+
+##     Read from file
+temp = np.load(filepath + "VelocityField.npz")
+VelField["VelX"] = temp["VelX"]
+VelField["VelY"] = temp["VelY"]
+VelField["VelZ"] = temp["VelZ"]
+
+## (3) Power Spectrum
+
