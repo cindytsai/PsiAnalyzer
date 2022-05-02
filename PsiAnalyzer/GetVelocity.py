@@ -66,8 +66,7 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
             ax[1, d].set_title(subtitleIm[d])
             ax[0, d].set_xlim([x_min, x_max])
             ax[1, d].set_xlim([x_min, x_max])
-        plt.show()
-        plt.savefig('check_velocity_convergence.png')
+        fig.savefig('check_velocity_convergence.png', bbox_inches="tight")
 
     else:
         grad_dataRe_x, grad_dataRe_y, grad_dataRe_z = Gradient_with_fft(dataRe, cell_space, fft_pad)
