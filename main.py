@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from PsiAnalyzer.Normalize import Normalize
+from PsiAnalyzer.GetVelocity import GetVelocity
 
 ## Read data file name and basic info.
 filepath = "./Data/"
@@ -40,4 +41,7 @@ temp = np.load(filepath + "NormField.npz")
 NormField["Real"] = temp["Real"]
 NormField["Imag"] = temp["Imag"]
 
-## (2) Do DFT
+## (2) Get velocity field
+vx, vy, vz = GetVelocity(NormField["Real"], NormField["Imag"], code_unit*cell_unit, 0.2, check_convergence=True,
+                         check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175])
+np.savez(filepath + "VelocityField.npz", VelX=vx, VelY=vy, VelZ=vz)

@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import Gradient
+from .Gradient import Gradient_with_fft
 
 
 def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, check_pad=[]):
@@ -29,12 +29,12 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
         for pad in check_pad:
             # save result in data1/2 respectively, so that we can compare.
             if flag is True:
-                dataRe1 = Gradient.Gradient_with_fft(dataRe, cell_space, pad)
-                dataIm1 = Gradient.Gradient_with_fft(dataIm, cell_space, pad)
+                dataRe1 = Gradient_with_fft(dataRe, cell_space, pad)
+                dataIm1 = Gradient_with_fft(dataIm, cell_space, pad)
                 flag = False
             else:
-                dataRe2 = Gradient.Gradient_with_fft(dataRe, cell_space, pad)
-                dataIm2 = Gradient.Gradient_with_fft(dataIm, cell_space, pad)
+                dataRe2 = Gradient_with_fft(dataRe, cell_space, pad)
+                dataIm2 = Gradient_with_fft(dataIm, cell_space, pad)
                 flag = True
             if first_enter is False:
                 for d in range(3):
@@ -51,12 +51,27 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
                     grad_dataRe_x, grad_dataRe_y, grad_dataRe_z = dataRe2
                     grad_dataIm_x, grad_dataIm_y, grad_dataIm_z = dataIm2
 
-        # TODO:START HERE. Plot the result.
-        
+        # plot the result.
+        fig, ax = plt.subplots(2, 3)
+        fig.suptitle("Difference Between Paddings")
+
+        x_tick = np.array(check_pad)[1:]
+        x_min, x_max = np.min(np.array(check_pad)), np.max(np.array(check_pad))
+        subtitleRe = ["Re_x", "Re_y", "Re_z"]
+        subtitleIm = ["Im_x", "Im_y", "Im_z"]
+        for d in range(3):
+            ax[0, d].plot(x_tick, np.array(diff_Re[d]), '.-')
+            ax[1, d].plot(x_tick, np.array(diff_Im[d]), '.-')
+            ax[0, d].set_title(subtitleRe[d])
+            ax[1, d].set_title(subtitleIm[d])
+            ax[0, d].set_xlim([x_min, x_max])
+            ax[1, d].set_xlim([x_min, x_max])
+        plt.show()
+        plt.savefig('check_velocity_convergence.png')
 
     else:
-        grad_dataRe_x, grad_dataRe_y, grad_dataRe_z = Gradient.Gradient_with_fft(dataRe, cell_space, fft_pad)
-        grad_dataIm_x, grad_dataIm_y, grad_dataIm_z = Gradient.Gradient_with_fft(dataIm, cell_space, fft_pad)
+        grad_dataRe_x, grad_dataRe_y, grad_dataRe_z = Gradient_with_fft(dataRe, cell_space, fft_pad)
+        grad_dataIm_x, grad_dataIm_y, grad_dataIm_z = Gradient_with_fft(dataIm, cell_space, fft_pad)
 
     # get probability current.
     J_x = -dataIm * grad_dataRe_x + dataRe * grad_dataIm_x
