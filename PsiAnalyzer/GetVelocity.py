@@ -7,8 +7,8 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
     """
     Get velocity field of psi.
 
-    :param dataRe: Re( psi )
-    :param dataIm: Im( psi )
+    :param dataRe: Normalized Re( psi )
+    :param dataIm: Normalized Im( psi )
     :param cell_space: Spacing between sample points.
     :param fft_pad: Ratio of padding width to target field width at each side.
     :param check_convergence: Check convergence. Default is False.

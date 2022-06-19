@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def Normalize(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_space, density_unit):
     """
     This function will normalize real and imaginary part of psi to flat field. Which means after normalization,
@@ -34,11 +35,11 @@ def Normalize(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_spa
     D1 = np.zeros(data_dim, dtype=data_type)
     D2 = np.zeros(data_dim, dtype=data_type)
     for i in range(len(ProRadius) - 1):
-        mask = (ProRadius[i] <= RadiusData) & (RadiusData < ProRadius[i+1])
+        mask = (ProRadius[i] <= RadiusData) & (RadiusData < ProRadius[i + 1])
         R1 += ProRadius[i] * mask
-        R2 += ProRadius[i+1] * mask
+        R2 += ProRadius[i + 1] * mask
         D1 += ProDensity[i] * mask
-        D2 += ProDensity[i+1] * mask
+        D2 += ProDensity[i + 1] * mask
 
     # Fill in density directly if radius smaller or bigger than the profile radius.
     mask = (RadiusData < ProRadius[0])
@@ -59,7 +60,7 @@ def Normalize(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_spa
 
     assert (len(np.argwhere(R2 == 0)) == 0) or (len(np.argwhere(R1 == 0)) == 0), "Matrix element for interpolating " \
                                                                                  "not set. "
-    AveDensity = ((R2 - RadiusData)*D1 + (RadiusData - R1)*D2) / (R2 - R1)
+    AveDensity = ((R2 - RadiusData) * D1 + (RadiusData - R1) * D2) / (R2 - R1)
 
     # Return normalized real and imaginary part of psi.
     return dataRe * np.sqrt(density_unit / AveDensity), dataIm * np.sqrt(density_unit / AveDensity)

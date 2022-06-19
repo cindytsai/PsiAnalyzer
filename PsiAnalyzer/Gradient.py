@@ -10,6 +10,7 @@ def Gradient_with_fft(f, dx, pad):
     3. Compute IFFT to get grad(f).
 
     :param f: Target function, in [x][y][z] orientation.
+    :param dx: sample size
     :param pad: Ratio of padding 0 length compare to the length of that axis at each side.
     Pad ceil( f.shape * pad ) zeros.
     :return: List [fx, fy, fz]
@@ -47,6 +48,7 @@ def Gradient_with_fft(f, dx, pad):
     grad_fz = np.roll(grad_fz, (-pad_x, -pad_y, -pad_z), axis=(0, 1, 2))[0:f.shape[0], 0:f.shape[1], 0:f.shape[2]]
 
     return [grad_fx, grad_fy, grad_fz]
+
 
 def Gradient_with_numpy(f):
     """
