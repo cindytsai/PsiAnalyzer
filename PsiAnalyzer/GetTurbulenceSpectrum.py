@@ -16,6 +16,18 @@ def _pad_zeros(f, pad):
 
 
 def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check_convergence=False, check_pad=[]):
+    """
+    Get turbulence spectrum logE - logk.
+    :param v_x: velocity field x component.
+    :param v_y: velocity field y component.
+    :param v_z: velocity field z component.
+    :param cell_space: sampling space between grid data.
+    :param fft_pad: padding zeros ratio outside of region.
+    :param num_bin: number of bin for plotting.
+    :param check_convergence: check different padding ratio in check_pad to see if they converge.
+    :param check_pad:
+    :return:
+    """
     if check_convergence is True:
         if fft_pad not in check_pad:
             check_pad.append(fft_pad)
@@ -35,9 +47,9 @@ def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check
                      math.ceil(pad * v_x.shape[2]) * 2 + v_x.shape[2]]
 
         # create k = (kx, ky, kz)
-        kx2 = np.power(np.fft.fftfreq(v_k_shape[0], d=cell_space), 2)
-        ky2 = np.power(np.fft.fftfreq(v_k_shape[1], d=cell_space), 2)
-        kz2 = np.power(np.fft.rfftfreq(v_k_shape[2], d=cell_space), 2)
+        kx2 = np.power(2.0 * np.pi * np.fft.fftfreq(v_k_shape[0], d=cell_space), 2)
+        ky2 = np.power(2.0 * np.pi * np.fft.fftfreq(v_k_shape[1], d=cell_space), 2)
+        kz2 = np.power(2.0 * np.pi * np.fft.rfftfreq(v_k_shape[2], d=cell_space), 2)
         xx, yy, zz = np.meshgrid(kx2, ky2, kz2, indexing='ij')
         kk_norm = np.sqrt(xx + yy + zz)
 
