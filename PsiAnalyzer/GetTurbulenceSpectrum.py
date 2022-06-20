@@ -15,7 +15,8 @@ def _pad_zeros(f, pad):
     return f_pad
 
 
-def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check_convergence=False, check_pad=[]):
+def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check_convergence=False, check_pad=[],
+                          filename="TurbulenceSpectrum.png"):
     """
     Get turbulence spectrum logE - logk.
     :param v_x: velocity field x component.
@@ -80,4 +81,4 @@ def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check
     plt.title('Turbulence Spectrum')
     plt.xlabel(r'$\log k$')
     plt.ylabel(r'$\log E$')
-    plt.savefig('TurbulenceSpectrum.png')
+    plt.savefig(filename)
