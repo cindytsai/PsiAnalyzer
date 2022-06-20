@@ -32,7 +32,7 @@ def Decompose(v_x, v_y, v_z, cell_space, pad):
     v_z_pad = _pad_zeros(v_z, pad)
     pad_x, pad_y, pad_z = math.ceil(pad * v_x.shape[0]), math.ceil(pad * v_x.shape[1]), math.ceil(pad * v_x.shape[2])
 
-    # find phi_k.
+    # find phi_k, and replace nan with 0.
     k_x = np.fft.fftfreq(v_x_pad.shape[0], d=cell_space)
     k_y = np.fft.fftfreq(v_x_pad.shape[1], d=cell_space)
     k_z = np.fft.rfftfreq(v_x_pad.shape[2], d=cell_space)
@@ -40,6 +40,7 @@ def Decompose(v_x, v_y, v_z, cell_space, pad):
 
     phi_k = -1.0j * (k_xx * np.fft.rfftn(v_x_pad) + k_yy * np.fft.rfftn(v_y_pad) + k_zz * np.fft.rfftn(v_z_pad))
     phi_k = phi_k / (np.power(k_xx, 2) + np.power(k_yy, 2) + np.power(k_zz, 2))
+    phi_k[np.isnan(phi_k)] = 0.0
 
     # find longitudinal and rotational component.
     v_long_x = np.fft.irfftn(1.0j * k_xx * phi_k)

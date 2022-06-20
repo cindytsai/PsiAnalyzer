@@ -82,3 +82,6 @@ def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check
     plt.xlabel(r'$\log k$')
     plt.ylabel(r'$\log E$')
     plt.savefig(filename)
+
+    # Clear image buffer
+    plt.clf()
