@@ -16,7 +16,7 @@ def _pad_zeros(f, pad):
 
 
 def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check_convergence=False, check_pad=[],
-                          filename="TurbulenceSpectrum.png"):
+                          filename="TurbulenceSpectrum.png", txt_basename="TurSpectrum_txt"):
     """
     Get turbulence spectrum logE - logk.
     :param v_x: velocity field x component.
@@ -73,6 +73,10 @@ def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check
 
         # add to image buffer, and shift k_norm.
         plt.plot(k_norm[:-1] * k_shift, power_spectrum, '.-', label='pad ratio = {}'.format(pad))
+
+        # write to file
+        txt_name = "{}_pad={}.txt".format(txt_basename, pad)
+        np.savetxt(txt_name, np.stack((k_norm[:-1] * k_shift, power_spectrum), axis=1), header="k\tE")
 
     # Plot the result
     plt.xscale('log')
