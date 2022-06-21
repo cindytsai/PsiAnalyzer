@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 from PsiAnalyzer.Normalize import Normalize
 from PsiAnalyzer.GetVelocity import GetVelocity
+from PsiAnalyzer.GetTurbulenceSpectrum import GetTurbulenceSpectrum
+from PsiAnalyzer.Decompose import Decompose
 
 ## Read data file name and basic info.
 filepath = "./Data/"
@@ -26,7 +28,6 @@ kpc2cm = 3.086e+21
 profile_raw = pd.read_csv(filepath + profile_filename, skiprows=1, names=["Radius", "Density"], sep=" ")
 profile = {"Radius": profile_raw["Radius"].to_numpy() * kpc2cm,
            "Density": profile_raw["Density"].to_numpy()}
-
 
 ## (1) Get normalized Re(psi) and Im(psi) field
 # NormField = dict()
@@ -56,5 +57,20 @@ VelField["VelX"] = temp["VelX"]
 VelField["VelY"] = temp["VelY"]
 VelField["VelZ"] = temp["VelZ"]
 
-## (3) Power Spectrum
+## (3) Power Spectrum of Velocity
+# GetTurbulenceSpectrum(VelField["VelX"], VelField["VelY"], VelField["VelZ"], code_unit * cell_unit, 0.2,
+#                       check_convergence=True, check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175])
+
+## (4) Decompose to longitudinal and rotational component
+v_long, v_rota = Decompose(VelField["VelX"], VelField["VelY"], VelField["VelZ"], code_unit * cell_unit, 0.2)
+np.savez(filepath + "VelLong.npz", x=v_long[0], y=v_long[1], z=v_long[2])
+np.savez(filepath + "VelRota.npz", x=v_rota[0], y=v_rota[1], z=v_rota[2])
+
+v_long = np.load(filepath + "VelLong.npz")
+v_rota = np.load(filepath + "VelRota.npz")
+
+GetTurbulenceSpectrum(v_long["x"], v_long["y"], v_long["z"], code_unit * cell_unit, 0.2,
+                      check_convergence=True, check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175], filename="VelLongTurSpectrum.png")
+GetTurbulenceSpectrum(v_rota["x"], v_rota["y"], v_rota["z"], code_unit * cell_unit, 0.2,
+                      check_convergence=True, check_pad=[0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175], filename="VelRotaTurSpectrum.png")
 
