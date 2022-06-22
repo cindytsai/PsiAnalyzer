@@ -76,7 +76,7 @@ def GetTurbulenceSpectrum(v_x, v_y, v_z, cell_space, fft_pad, num_bin=200, check
 
         # write to file
         txt_name = "{}_pad={}.txt".format(txt_basename, pad)
-        np.savetxt(txt_name, np.stack((k_norm[:-1] * k_shift, power_spectrum), axis=1), header="k\tE")
+        np.savetxt(txt_name, np.stack((k_norm[:-1] * k_shift, np.asarray(power_spectrum)), axis=1), header="k\tE")
 
     # Plot the result
     plt.xscale('log')
