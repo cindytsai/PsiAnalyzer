@@ -62,5 +62,8 @@ def Normalize(profile, dataRe, dataIm, data_dim, data_type, center_idx, cell_spa
                                                                                  "not set. "
     AveDensity = ((R2 - RadiusData) * D1 + (RadiusData - R1) * D2) / (R2 - R1)
 
-    # Return normalized real and imaginary part of psi.
+    # Return normalized real and imaginary part of psi, and check density_unit = 0 if AveDensity=0.
+    AveDensity[np.logical_and(dataRe == 0.0, dataIm == 0.0)] = 1.0
+    assert np.sum(AveDensity == 0.0) == 0, "Unable to resolve divided by 0, something go wrong in density profile."
+
     return dataRe * np.sqrt(density_unit / AveDensity), dataIm * np.sqrt(density_unit / AveDensity)

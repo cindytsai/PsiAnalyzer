@@ -77,7 +77,12 @@ def GetVelocity(dataRe, dataIm, cell_space, fft_pad, check_convergence=False, ch
     J_y = -dataIm * grad_dataRe_y + dataRe * grad_dataIm_y
     J_z = -dataIm * grad_dataRe_z + dataRe * grad_dataIm_z
 
-    # divide density at each sample points.
+    # divide density at each sample points, and make J=0 at points with density=0.
     density = np.power(dataRe, 2) + np.power(dataIm, 2)
+    mask = (density == 0.0)
+    J_x[mask] = 0.0
+    J_y[mask] = 0.0
+    J_z[mask] = 0.0
+    density[mask] = 1.0
 
     return J_x / density, J_y / density, J_z / density
