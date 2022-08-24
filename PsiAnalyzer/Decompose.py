@@ -56,3 +56,12 @@ def Decompose(v_x, v_y, v_z, cell_space, pad):
     v_rota_z = v_z - v_long_z
 
     return [v_long_x, v_long_y, v_long_z], [v_rota_x, v_rota_y, v_rota_z]
+
+
+def CheckDecomposeRota(v_rota_x, v_rota_y, v_rota_z, pad):
+    f_size = v_rota_x.shape
+    v_rota_x = _pad_zeros(v_rota_x, pad)
+    v_rota_y = _pad_zeros(v_rota_y, pad)
+    v_rota_z = _pad_zeros(v_rota_z, pad)
+    pad_x, pad_y, pad_z = math.ceil(pad * f_size[0]), math.ceil(pad * f_size[1]), math.ceil(pad * f_size[2])
+
